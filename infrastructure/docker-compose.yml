@@ -1,0 +1,33 @@
+version: "3" # composeファイルのバージョン
+services: 
+    gin-app: 
+        container_name: gin-app
+        build: ./docker/go
+        tty: true # ②コンテナの永続化
+        volumes:
+          - ../backend:/work/backend
+        ports:
+          - 8080:8080
+        networks:
+          - gin-app-net
+    gin-db:
+      container_name: gin-db
+      # Dockerfileどこにあるか
+      build: ./docker/mysql
+      # DBのファイルどこにあるか
+      # サーバー側(ローカル)(今操作してる方) :コンテナ側
+      volumes:
+      # gin-dbのものを、var/lib/mysqlに保存しているということ
+        - gin-db:/var/lib/mysql
+      expose:
+        - 3306
+      ports:
+        - 3306:3306
+      networks:
+        - gin-app-net
+
+networks:
+  gin-app-net:
+    driver: bridge
+volumes:
+  gin-db:
