@@ -1,3 +1,5 @@
-module github.com/gin/backend/db
+module db
 
 go 1.18
+
+replace gin/db => ./db
